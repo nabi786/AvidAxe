@@ -6,6 +6,8 @@ import { Grid, Box, Card, Stack, Typography } from '@mui/material';
 import PageContainer from 'src/components/container/PageContainer';
 import Logo from 'src/layouts/full/shared/logo/Logo';
 import AuthLogin from './auth/AuthLogin';
+import GoogleLogin from '../../components/auth/loginWithGoogle/index'
+
 
 const Login2 = () => {
   
@@ -54,7 +56,7 @@ const Login2 = () => {
                     </Typography>
                     <Typography
                       component={Link}
-                      to="/auth/register"
+                      to="/signup"
                       fontWeight="500"
                       sx={{
                         textDecoration: 'none',

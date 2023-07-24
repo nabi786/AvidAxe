@@ -31,12 +31,12 @@ const Router = [
     ],
   },
   {
-    path: '/auth',
+    path: '/',
     element: <BlankLayout />,
     children: [
       { path: '404', element: <Error /> },
-      { path: '/auth/register', element: <Register /> },
-      { path: '/auth/login', element: <Login /> },
+      {path: '/login', element: <Login />},
+      { path: '/signup', element: <Register /> },
       { path: '*', element: <Navigate to="/auth/404" /> },
     ],
   },

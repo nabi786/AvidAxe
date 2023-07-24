@@ -7,7 +7,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <Suspense>
     <BrowserRouter>
-      <App />
+      <App/>
     </BrowserRouter>
   </Suspense>
 );
