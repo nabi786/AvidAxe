@@ -1,12 +1,28 @@
-import React from 'react';
+import React , {useEffect}from 'react';
 import { Grid, Box, Card, Typography, Stack } from '@mui/material';
 import { Link } from 'react-router-dom';
 import PageContainer from 'src/components/container/PageContainer';
 import Logo from 'src/layouts/full/shared/logo/Logo';
 import AuthRegister from './auth/AuthRegister';
+import { useNavigate } from 'react-router-dom';
 
 const Register2 = () => {
 
+  let navigate = navigate()
+
+  useEffect(()=>{
+    // dont show login if token in available in localStorage
+    function handleAuth(){
+      var access_token = JSON.parse(localStorage.getItem("sb-myxiklaowgdbpvlonfkf-auth-token"))
+
+      if(access_token){
+        navigate("/")
+      }
+      
+    }
+    
+    handleAuth()
+  },[])
 
 
   return (

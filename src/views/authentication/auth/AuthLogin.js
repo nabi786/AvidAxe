@@ -48,13 +48,10 @@ const AuthLogin = ({ title, subtitle, subtext }) => {
     });
 
     if (data.session != null) {
-      console.log('logn data ', data);
 
-      // saving session to location storage
-      localStorage.setItem('access_token', data.session.access_token);
-
+      // console.log("data ", data.user)
       // dispetch user data
-      dispetch(addUser(data.user));
+      // dispetch(addUser(data.user));
 
       // navigate to home page
       navigate('/');

@@ -1,4 +1,4 @@
-import React from 'react';
+import React , {useEffect}from 'react';
 import { Link } from 'react-router-dom';
 import { Grid, Box, Card, Stack, Typography } from '@mui/material';
 
@@ -6,10 +6,30 @@ import { Grid, Box, Card, Stack, Typography } from '@mui/material';
 import PageContainer from 'src/components/container/PageContainer';
 import Logo from 'src/layouts/full/shared/logo/Logo';
 import AuthLogin from './auth/AuthLogin';
-import GoogleLogin from '../../components/auth/loginWithGoogle/index'
+import GoogleLogin from '../../components/auth/loginWithGoogle/index';
+import { useNavigate } from 'react-router-dom';
 
 
 const Login2 = () => {
+
+  let navigate = useNavigate()
+  
+  useEffect(()=>{
+    // dont show login if token in available in localStorage
+    function handleAuth(){
+      var access_token = JSON.parse(localStorage.getItem("sb-myxiklaowgdbpvlonfkf-auth-token"))
+
+      if(access_token){
+        navigate("/")
+      }
+      
+    }
+    
+    handleAuth()
+  },[])
+  
+
+
   
   return (
     <PageContainer title="Login" description="this is Login page">

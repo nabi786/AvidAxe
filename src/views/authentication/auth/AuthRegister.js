@@ -1,4 +1,4 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import supabase from '../../../supabase/supabaseClient';
 import { Box, Typography, Button } from '@mui/material';
 // import { Link } from 'react-router-dom';
@@ -10,12 +10,24 @@ import Swal from 'sweetalert2';
 
 import CircularProgress from '@mui/material/CircularProgress';
 
+import { generateApiKey } from '../../../utils/generateAPIKey';
+
 const AuthRegister = ({ title, subtitle, subtext }) => {
   var [value, setValue] = useState('');
 
-  const [loader,setLoader] = useState(false)
+  const [loader, setLoader] = useState(false);
+  const [api_key, setAPIKey] = useState('');
 
-//   handle change input value
+  // use effect
+  useEffect(() => {
+    async function generateKey() {
+      var result = await generateApiKey(32);
+      setAPIKey(result);
+    }
+    generateKey();
+  }, []);
+
+  //   handle change input value
   const handleChange = (e) => {
     const { name, value } = e.target;
     setValue((prevData) => ({
@@ -24,14 +36,10 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
     }));
   };
 
-
-
-//   handle signup
+  //   handle signup
   const handleSignup = async () => {
     try {
-    
-      setLoader(true)
-
+      setLoader(true);
 
       console.log('values  ', value);
       // console.log("supabase ", supabase)
@@ -44,34 +52,57 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
           },
         },
       });
-        
-    
-      if(data.user != null){
-            console.log("data", data)
-            Swal.fire({
-                title: 'Success',
-                text: 'Kindly varify your email address',
-                icon: 'success',
-                confirmButtonText: 'OK',
-            });
 
-      }else{
+      console.log('data initilized ', data);
+      if (data.user != null) {
+        console.log('data', data.user.id);
+        // console.log("data registered ", data.user)
+        // data.user.email
+        // data.user.user_metadata.first_name;
+        console.log("email selected ",data.user.email)
+        console.log("name selected ",data.user.user_metadata.first_name)
+        console.log("name api_key ",api_key)
+        var result = await supabase
+          .from('Users')
+          .insert([
+            { name: data.user.user_metadata.first_name, 
+              email: data.user.email, 
+              api_key: api_key,
+              userID : data.user.id
+            },
+          ])
+          .select();
 
-            console.log("error ", error);
-                Swal.fire({
-                title: 'failed',
-                text: 'Something went wrong, try later',
-                icon: 'error',
-                confirmButtonText: 'OK',
-            });
-        
+        console.log("this is result ", result)
+        Swal.fire({
+          title: 'Success',
+          text: 'Kindly varify your email address',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        });
+      } else {
+        console.log('error ', error);
+        Swal.fire({
+          title: 'failed',
+          text: 'Something went wrong, try later',
+          icon: 'error',
+          confirmButtonText: 'OK',
+        });
       }
-      
-      setLoader(false)
+
+      setLoader(false);
     } catch (err) {
       console.log('err ', err);
-      setLoader(false)
-      
+
+    
+      Swal.fire({
+        title: 'failed',
+        text: 'Something went wrong, try later',
+        icon: 'error',
+        confirmButtonText: 'OK',
+      });
+
+      setLoader(false);
     }
   };
 
@@ -142,12 +173,12 @@ const AuthRegister = ({ title, subtitle, subtext }) => {
         </Stack>
         {/* <Button color="primary" variant="contained" size="large" fullWidth component={Link} to="/auth/login"  */}
         <Button color="primary" variant="contained" size="large" fullWidth onClick={handleSignup}>
-            Sign Up
-            {
-                loader ? <CircularProgress color="inherit" size="20px" sx={{marginLeft : "10px"}}/> : ""
-            }
-            
-         
+          Sign Up
+          {loader ? (
+            <CircularProgress color="inherit" size="20px" sx={{ marginLeft: '10px' }} />
+          ) : (
+            ''
+          )}
         </Button>
       </Box>
       {subtitle}

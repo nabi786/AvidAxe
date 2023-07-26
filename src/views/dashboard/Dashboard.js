@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Grid, Box } from '@mui/material';
 import PageContainer from 'src/components/container/PageContainer';
 
@@ -9,9 +9,13 @@ import RecentTransactions from './components/RecentTransactions';
 import ProductPerformance from './components/ProductPerformance';
 import Blog from './components/Blog';
 import MonthlyEarnings from './components/MonthlyEarnings';
-
+import {isAuthenticated} from '../../utils/auth';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+
+  
+
   return (
     <PageContainer title="Dashboard" description="this is Dashboard">
       <Box>
